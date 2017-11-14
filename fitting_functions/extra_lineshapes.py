@@ -17,3 +17,16 @@ def make_gaussian_kernal(x, sigma):
 def convolve(y, kernal):
     """ Convolve signal y with kernal. """
     return np.convolve(y, kernal, mode='same')
+
+def Lorenzian(x, amplitude, center, sigma):
+    """ Lorentizan defined by peak height """
+    return amplitude/((x-center)**2+sigma**2)
+
+def antisymlorz(x, center=0.15, amplitude=0.1, sigma=0.05, kBT=8.617e-5*100):
+    """Antisymmeterized Lorentzian
+    """
+    def lor(x, center, amplitude, sigma):
+        return amplitude / (1. + ((x - center) / sigma)**2)
+
+    chi = Lorenzian(x, amplitude, center, sigma) - Lorenzian(x, amplitude, center, sigma)
+    return chi
