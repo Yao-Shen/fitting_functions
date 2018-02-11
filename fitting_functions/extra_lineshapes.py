@@ -7,9 +7,11 @@ def magnon(x, amplitude, center, sigma, res, kBT):
     magnon(x, amplitude, center, sigma, res, kBT) =
         convolve(antisymlorz(x, amplitude, center, sigma)*bose(x, kBT), kernal)
     """
-    kernal = make_gaussian_kernal(x, res)
-    y = convolve(antisymlorz(x, amplitude, center, sigma)*bose(x, kBT), kernal)
-    return y
+    step = min(np.abs(np.mean(np.diff(x))), sigma, res) / 20
+    x_magnon = np.arange(-res*20, res*20, step)
+    kernal = make_gaussian_kernal(x_magnon, res)
+    y_magnon = convolve(antisymlorz(x_magnon, amplitude, center, sigma)*bose(x_magnon, kBT), kernal)
+    return np.interp(x, x_magnon, y_magnon)
 
 def bose(x, kBT):
     """Return a 1-dimensinoal Bose factor function
@@ -43,8 +45,8 @@ def zero2Linear(x, center=0, sigma=1, grad=1):
     (x-center)*grad  : x>center
     convolved by gaussian(x, sigma)
     """
-    step = np.abs(np.mean(np.diff(x)))
-    x_linear = np.arange(-10*sigma+np.min(x), 10*sigma+np.max(x), step)
+    step = min(np.abs(np.mean(np.diff(x))), sigma) / 20
+    x_linear = np.arange(-20*sigma+np.min(x), 20*sigma+np.max(x), step)
     y_linear = (x_linear-center)*grad
     y_linear[x_linear<center] = 0
     y_linear = convolve(y_linear, make_gaussian_kernal(x_linear, sigma))
@@ -58,8 +60,8 @@ def zero2Quad(x, center=0, sigma=1, quad=1):
     (x-center)**2 * quad    : x>center
     convolved by gaussian(x, sigma)
     """
-    step = np.abs(np.mean(np.diff(x)))
-    x_quad = np.arange(-10*sigma+np.min(x), 10*sigma+np.max(x), step)
+    step = min(np.abs(np.mean(np.diff(x))), sigma) / 20
+    x_quad = np.arange(-20*sigma+np.min(x), 20*sigma+np.max(x), step)
     y_quad = (x_quad-center)**2 * quad
     y_quad[x_quad<center] = 0
     y_quad = convolve(y_quad, make_gaussian_kernal(x_quad, sigma))
