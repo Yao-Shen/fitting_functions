@@ -1,14 +1,35 @@
 import numpy as np
 from lmfit.lineshapes import lorentzian
 
+def paramagnon(x, amplitude, center, sigma, res, kBT):
+    """Return a damped harmonic oscillator
+
+    Form of equation from https://journals.aps.org/prb/pdf/10.1103/PhysRevB.93.214513
+    (eq 4)
+
+    kBT should be in the same units as x
+    n.b. kB = 8.617e-5 eV/K
+    """
+    step = min(np.abs(np.mean(np.diff(x))), sigma/20, res/20)
+    x_paramagnon = np.arange(np.min(x) - res*10, np.max(x) + res*10, step)
+
+    chi_paramagnon = (2*x_paramagnon*amplitude*sigma*center /
+                     (( x_paramagnon**2 - center**2)**2 +
+                      (x_paramagnon*sigma)**2 ))
+
+    kernal = make_gaussian_kernal(x_paramagnon, res)
+    y_paramagnon = convolve(chi_paramagnon * bose(x_paramagnon, kBT), kernal)
+    return np.interp(x, x_paramagnon, y_paramagnon)
+
+
 def magnon(x, amplitude, center, sigma, res, kBT):
     """Return a 1-dimensional Antisymmeterized Lorenzian multiplied by Bose factor
     and convolved with resolution.
-    magnon(x, amplitude, center, sigma, res, kBT) =
+    magnon(x, amplditude, center, sigma, res, kBT) =
         convolve(antisymlorz(x, amplitude, center, sigma)*bose(x, kBT), kernal)
     """
-    step = min(np.abs(np.mean(np.diff(x))), sigma, res) / 20
-    x_magnon = np.arange(-res*20, res*20, step)
+    step = min(np.abs(np.mean(np.diff(x))), sigma/20., res/20.)
+    x_magnon = np.arange(np.min(x) - res*10, x.max() + res*10, step)
     kernal = make_gaussian_kernal(x_magnon, res)
     y_magnon = convolve(antisymlorz(x_magnon, amplitude, center, sigma)*bose(x_magnon, kBT), kernal)
     return np.interp(x, x_magnon, y_magnon)
@@ -20,7 +41,7 @@ def bose(x, kBT):
 
     n.b. kB = 8.617e-5 eV/K
     """
-    return np.real(1./ (1 - np.exp(-x / (kBT)) +0.00001*1j ))
+    return np.real(1./ (1 - np.exp(-x / (kBT)) +0.0001*1j ))
 
 def make_gaussian_kernal(x, sigma):
     """Return 1-dimensional normalized Gaussian kernal suitable for performing a convolution

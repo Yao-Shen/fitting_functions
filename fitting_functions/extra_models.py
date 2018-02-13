@@ -20,25 +20,46 @@ prefix: string to prepend to paramter names, needed to add two Models that
     have parameter names in common. None by default.
 """
 
+class ParaMagnonModel(Model):
+    __doc__ = paramagnon.__doc__ + COMMON_DOC if magnon.__doc__ else ""
+    def __init__(self, *args, **kwargs):
+        super(ParaMagnonModel, self).__init__(magnon, *args, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('res', min=0)
+        self.set_param_hint('kBT', min=0)
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars = guess_from_peak(self, data, x, negative, ampscale=0.5, amp_area=False)
+        pname = "%s%s" % (self.prefix, 'res')
+        pars[pname].value = .1
+        pname = "%s%s" % (self.prefix, 'kbT')
+        pars[pname].value = .01
+        return update_param_vals(pars, self.prefix, **kwargs)
+
 class MagnonModel(Model):
     __doc__ = magnon.__doc__ + COMMON_DOC if magnon.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(MagnonModel, self).__init__(magnon, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('res', min=0)
+        self.set_param_hint('kBT', min=0)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, amp_area=False)
+        pname = "%s%s" % (self.prefix, 'res')
+        pars[pname].value = .1
+        pname = "%s%s" % (self.prefix, 'kbT')
+        pars[pname].value = .01
         return update_param_vals(pars, self.prefix, **kwargs)
 
 class Zero2LinearModel(Model):
-    __doc__ = magnon.__doc__ + COMMON_DOC if magnon.__doc__ else ""
+    __doc__ = zero2Linear.__doc__ + COMMON_DOC if magnon.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(Zero2LinearModel, self).__init__(zero2Linear, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
 
 class Zero2QuadModel(Model):
-    __doc__ = magnon.__doc__ + COMMON_DOC if magnon.__doc__ else ""
+    __doc__ = zero2Quad.__doc__ + COMMON_DOC if magnon.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(Zero2QuadModel, self).__init__(zero2Quad, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
