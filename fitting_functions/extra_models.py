@@ -1,7 +1,7 @@
 from lmfit.model import Model
 from lmfit.models import guess_from_peak, update_param_vals
 
-from .extra_lineshapes import magnon, zero2Linear, zero2Quad
+from .extra_lineshapes import paramagnon, magnon, zero2Linear, zero2Quad
 
 
 COMMON_DOC = """
