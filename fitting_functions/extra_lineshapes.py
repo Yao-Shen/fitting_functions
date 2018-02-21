@@ -95,3 +95,35 @@ def antisymlorz(x, amplitude=0.1, center=0.15, sigma=0.05):
     """
     chi = lorentzian(x, amplitude, center, sigma) - lorentzian(x, amplitude, -center, sigma)
     return chi
+
+def plane3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0., ravel=True):
+    """ Return a 3-dimensional plane
+    plane_3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0., ravel=True)
+    C + X*slopex + Y*slopey + Z*slopez
+    Note that ravel=True must be used when passed to lmfit
+    """
+    I = C + X*slopex + Y*slopey + Z*slopez
+    if ravel:
+        I = I.ravel()
+
+    return I
+
+def lorentzianSq3D(X, Y, Z, amplitude=1.,
+                     centerx=0., centery=0., centerz=0.,
+                     sigmax=1., sigmay=1., sigmaz=1., ravel=True):
+    """ Return a 3-dimensional lorentzian squared function
+    I = 1/(1 + (((X-centerx)/sigmax)**2 +
+                        ((Y-centery)/sigmay)**2 +
+                        ((Z-centerz)/sigmaz)**2))
+    I *= amplitude**2/(2*np.pi)
+    Note that ravel=True must be used when passed to lmfit
+    """
+    I = 1/(1 + (((X-centerx)/sigmax)**2 +
+                        ((Y-centery)/sigmay)**2 +
+                        ((Z-centerz)/sigmaz)**2))
+    I *= amplitude**2/(2*np.pi)
+
+    if ravel:
+        I = I.ravel()
+
+    return I

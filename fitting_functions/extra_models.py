@@ -1,7 +1,7 @@
 from lmfit.model import Model
 from lmfit.models import guess_from_peak, update_param_vals
 
-from .extra_lineshapes import magnon, zero2Linear, zero2Quad
+from .extra_lineshapes import paramagnon, magnon, zero2Linear, zero2Quad, lorentzianSq3D,  plane3D
 
 
 COMMON_DOC = """
@@ -68,6 +68,34 @@ class Zero2QuadModel(Model):
     #def guess(self, data, x=None, negative=False, **kwargs):
     #    pars = guess_from_peak(self, data, x, negative, ampscale=0.5, amp_area=False)
     #    return update_param_vals(pars, self.prefix, **kwargs)
+
+class LorentzianSq3DModel(Model):
+    __doc__ = lorentzianSq3D.__doc__ + COMMON_DOC if lorentzianSq3D.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(LorentzianSq3DModel, self).__init__(lorentzianSq3D, **kwargs)
+        self.set_param_hint('sigmax', min=0)
+        self.set_param_hint('sigmay', min=0)
+        self.set_param_hint('sigmaz', min=0)
+
+class Plane3DModel(Model):
+    __doc__ = plane3D.__doc__ + COMMON_DOC if plane3D.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(Plane3DModel, self).__init__(plane3D, **kwargs)
+
+    #def guess(self, data, x=None, negative=False, **kwargs):
+    #    pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
+    #    return update_param_vals(pars, self.prefix, **kwargs)
+
+    #__init__.__doc__ = COMMON_INIT_DOC
+    #guess.__doc__ = COMMON_GUESS_DOC
 
 # stuff from Vivek
 # class LorentzianSquaredModel(Model):
