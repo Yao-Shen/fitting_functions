@@ -1,7 +1,7 @@
 from lmfit.model import Model
 from lmfit.models import guess_from_peak, update_param_vals
 
-from .extra_lineshapes import paramagnon, magnon, zero2Linear, zero2Quad
+from .extra_lineshapes import paramagnon, magnon, zero2Linear, zero2Quad, lorentzianSq2D, lorentzianSq2DRot, lorentzianSq3D, plane2D, plane3D, plane3Dcentered, error
 
 
 COMMON_DOC = """
@@ -69,6 +69,29 @@ class Zero2QuadModel(Model):
     #    pars = guess_from_peak(self, data, x, negative, ampscale=0.5, amp_area=False)
     #    return update_param_vals(pars, self.prefix, **kwargs)
 
+class LorentzianSq2DModel(Model):
+    __doc__ = lorentzianSq2D.__doc__ + COMMON_DOC if lorentzianSq2D.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(LorentzianSq2DModel, self).__init__(lorentzianSq2D, **kwargs)
+        self.set_param_hint('sigmax', min=0)
+        self.set_param_hint('sigmay', min=0)
+
+class LorentzianSq2DRotModel(Model):
+    __doc__ = lorentzianSq2DRot.__doc__ + COMMON_DOC if lorentzianSq2DRot.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(LorentzianSq2DRotModel, self).__init__(lorentzianSq2DRot, **kwargs)
+        self.set_param_hint('angle', min=-90, max=90.)
+        self.set_param_hint('sigmax', min=0)
+        self.set_param_hint('sigmay', min=0)
+
 class LorentzianSq3DModel(Model):
     __doc__ = lorentzianSq3D.__doc__ + COMMON_DOC if lorentzianSq3D.__doc__ else ""
 
@@ -81,6 +104,15 @@ class LorentzianSq3DModel(Model):
         self.set_param_hint('sigmay', min=0)
         self.set_param_hint('sigmaz', min=0)
 
+class Plane2DModel(Model):
+    __doc__ = plane2D.__doc__ + COMMON_DOC if plane2D.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(Plane2DModel, self).__init__(plane2D, **kwargs)
+
 class Plane3DModel(Model):
     __doc__ = plane3D.__doc__ + COMMON_DOC if plane3D.__doc__ else ""
 
@@ -89,6 +121,33 @@ class Plane3DModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(Plane3DModel, self).__init__(plane3D, **kwargs)
+
+class Plane3DcenteredModel(Model):
+    __doc__ = plane3Dcentered.__doc__ + COMMON_DOC if plane3Dcentered.__doc__ else ""
+
+    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(Plane3DcenteredModel, self).__init__(plane3Dcentered, **kwargs)
+
+class ErrorModel(Model):
+    __doc__ = error.__doc__ + COMMON_DOC if error.__doc__ else ""
+
+    def __init__(self, prefix='', independent_vars=['x'], nan_policy='drop',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(ErrorModel, self).__init__(error, **kwargs)
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars = self.make_params()
+        pars['%samplitude' % self.prefix].set(value=data.max() - data.min())
+        try:
+            pars['%scenter' % self.prefix].set(value=(x.min() + x.max() )/2)
+        except AttributeError:
+            pass
+        return update_param_vals(pars, self.prefix, **kwargs)
 
     #def guess(self, data, x=None, negative=False, **kwargs):
     #    pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
