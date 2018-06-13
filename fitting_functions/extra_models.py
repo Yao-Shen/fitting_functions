@@ -72,7 +72,7 @@ class Zero2QuadModel(Model):
 class LorentzianSq2DModel(Model):
     __doc__ = lorentzianSq2D.__doc__ + COMMON_DOC if lorentzianSq2D.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
@@ -83,7 +83,7 @@ class LorentzianSq2DModel(Model):
 class LorentzianSq2DRotModel(Model):
     __doc__ = lorentzianSq2DRot.__doc__ + COMMON_DOC if lorentzianSq2DRot.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
@@ -95,7 +95,7 @@ class LorentzianSq2DRotModel(Model):
 class LorentzianSq3DModel(Model):
     __doc__ = lorentzianSq3D.__doc__ + COMMON_DOC if lorentzianSq3D.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y', 'Z'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
@@ -107,7 +107,7 @@ class LorentzianSq3DModel(Model):
 class Plane2DModel(Model):
     __doc__ = plane2D.__doc__ + COMMON_DOC if plane2D.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
@@ -116,7 +116,7 @@ class Plane2DModel(Model):
 class Plane3DModel(Model):
     __doc__ = plane3D.__doc__ + COMMON_DOC if plane3D.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y', 'Z'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
@@ -125,7 +125,7 @@ class Plane3DModel(Model):
 class Plane3DcenteredModel(Model):
     __doc__ = plane3Dcentered.__doc__ + COMMON_DOC if plane3Dcentered.__doc__ else ""
 
-    def __init__(self, independent_vars=['X', 'Y', 'Z', 'ravel'], prefix='', nan_policy='drop',
+    def __init__(self, independent_vars=['X', 'Y', 'Z'], prefix='', nan_policy='drop',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})

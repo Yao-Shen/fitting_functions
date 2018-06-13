@@ -105,96 +105,70 @@ def antisymlorz(x, amplitude=0.1, center=0.15, sigma=0.05):
     chi = lorentzian(x, amplitude, center, sigma) - lorentzian(x, amplitude, -center, sigma)
     return chi
 
-def plane2D(X, Y, C=0, slopex=0., slopey=0., ravel=True):
+def plane2D(X, Y, C=0, slopex=0., slopey=0.):
     """ Return a 3-dimensional plane
-    plane2D(X, Y, C=0, slopex=0., slopey=0., slopez=0., ravel=True)
+    plane2D(X, Y, C=0, slopex=0., slopey=0., slopez=0.)
     I = C + X*slopex + Y*slopey
-    Note that ravel=True must be used when passed to lmfit
     """
     I = C + X*slopex + Y*slopey
-    if ravel:
-        I = I.ravel()
-
     return I
 
-def plane3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0., ravel=True):
+def plane3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0.):
     """ Return a 3-dimensional plane
-    plane_3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0., ravel=True)
+    plane_3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0.)
     C + X*slopex + Y*slopey + Z*slopez
-    Note that ravel=True must be used when passed to lmfit
     """
     I = C + X*slopex + Y*slopey + Z*slopez
-    if ravel:
-        I = I.ravel()
-
     return I
 
 def plane3Dcentered(X, Y, Z, C=0, centerx=0., centery=0., centerz=0.,
-                     slopex=0., slopey=0., slopez=0., ravel=True):
+                     slopex=0., slopey=0., slopez=0.):
     """ Return a 3-dimensional plane
-    plane_3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0., ravel=True)
+    plane_3D(X, Y, Z, C=0, slopex=0., slopey=0., slopez=0.)
     C + X*slopex + Y*slopey + Z*slopez
-    Note that ravel=True must be used when passed to lmfit
     """
     I = C + (X - centerx)*slopex + (Y - centery)*slopey + (Z - centerz) *slopez
-    if ravel:
-        I = I.ravel()
-
     return I
 
 def lorentzianSq2D(X, Y, amplitude=1.,
                      centerx=0., centery=0.,
-                     sigmax=1., sigmay=1., ravel=True):
+                     sigmax=1., sigmay=1.):
     """ Return a 2-dimensional lorentzian squared function
     I = amplitude**2/(2*np.pi) * 1/(1 +
         (((X-centerx)/sigmax)**2 + ((Y-centery)/sigmay)**2))
-    Note that ravel=True must be used when passed to lmfit
     """
     I = amplitude**2/(2*np.pi) * 1/(1 +
         (((X-centerx)/sigmax)**2 + ((Y-centery)/sigmay)**2))
-
-    if ravel:
-        I = I.ravel()
-
     return I
 
 def lorentzianSq2DRot(X, Y, amplitude=1.,
                      centerx=0., centery=0.,
-                     sigmax=1., sigmay=1., angle=0., ravel=True):
+                     sigmax=1., sigmay=1., angle=0.):
     """ Return a 2-dimensional lorentzian squared function rotated by angle
     I = amplitude**2/(2*np.pi) * 1/(1 +
         (((X-centerx)/sigmax)**2 + ((Y-centery)/sigmay)**2))
     Note that angle is in degrees
-    Note that ravel=True must be used when passed to lmfit
     """
     Xrot = X*cos(angle) + Y*sin(angle)
     Yrot = X*sin(angle) + Y*cos(angle)
     I = amplitude**2/(2*np.pi) * 1/(1 +
         (((Xrot-centerx)/sigmax)**2 + ((Yrot-centery)/sigmay)**2))
 
-    if ravel:
-        I = I.ravel()
-
     return I
 
 def lorentzianSq3D(X, Y, Z, amplitude=1.,
                      centerx=0., centery=0., centerz=0.,
-                     sigmax=1., sigmay=1., sigmaz=1., ravel=True):
+                     sigmax=1., sigmay=1., sigmaz=1.):
     """ Return a 3-dimensional lorentzian squared function
     I = 1/(1 + (((X-centerx)/sigmax)**2 +
                         ((Y-centery)/sigmay)**2 +
                         ((Z-centerz)/sigmaz)**2))
     I *= amplitude**2/(2*np.pi)
-    Note that ravel=True must be used when passed to lmfit
     """
     I = 1/(1 + (((X-centerx)/sigmax)**2 +
                         ((Y-centery)/sigmay)**2 +
                         ((Z-centerz)/sigmaz)**2))
     I *= amplitude**2/(2*np.pi)
-
-    if ravel:
-        I = I.ravel()
-
     return I
 
 def error(x, amplitude=1., center=0., sigma=1.):
