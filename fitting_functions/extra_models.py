@@ -23,7 +23,7 @@ prefix: string to prepend to paramter names, needed to add two Models that
 class ParaMagnonModel(Model):
     __doc__ = paramagnon.__doc__ + COMMON_DOC if magnon.__doc__ else ""
     def __init__(self, *args, **kwargs):
-        super(ParaMagnonModel, self).__init__(magnon, *args, **kwargs)
+        super(ParaMagnonModel, self).__init__(paramagnon, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('res', min=0)
         self.set_param_hint('kBT', min=0)

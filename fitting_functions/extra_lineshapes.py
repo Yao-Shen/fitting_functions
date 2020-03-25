@@ -178,3 +178,10 @@ def error(x, amplitude=1., center=0., sigma=1.):
     For amplitude=1 sigma>0 this crosses over from 0 to 1 with increasing x
     Vice verse for sigma<0 """
     return amplitude/2*erf((x-center)/sigma) + 0.5
+
+# def dho(x, amplitude=1., center=0., sigma=1.):
+#         """Return a damped harmonic osciallator.
+#         """
+#         chi = 4*amplitude*sigma*x*center /
+#         (np.pi*((x**2 - center**2)**2 + 4*x**2*sigma**2))
+#
